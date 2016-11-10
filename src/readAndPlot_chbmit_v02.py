@@ -357,7 +357,7 @@ ampseries  = np.empty([1,2])
 seconds = 8
 window_size = freq*seconds #seconds
 #for window  in rolling_window(range(int(eeg.shape[1])), int(window_size)):
-for start in range(0, eeg.shape[1], int(window_size)):
+for start in range(0, eeg.shape[1], int(window_size))[0:-1]:
     window = [x+start for x in range(int(window_size))]
     for i in range(eeg.shape[0]):
         frq, Y     = plotTimeAndFreq2(eeg[i,window], window_size, freq, 0)
