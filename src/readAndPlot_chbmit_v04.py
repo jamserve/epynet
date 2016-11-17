@@ -94,10 +94,10 @@ def parse_summary( sfile ):
                     continue
                 withSeiz.append(i)
                 data[i].update({'numSeiz': seizures})
-            elif line.startswith("Seizure S"):
+            elif line.startswith("Seizure") and 'Start' in line:
     #            print(line)
                 start.append( float(line.split(' ', -1)[-2]) )
-            elif line.startswith("Seizure E"):
+            elif line.startswith("Seizure") and 'End' in line:
                 stop.append(  float(line.split(' ', -1)[-2]) )
                 seizures -= 1
                 if seizures == 0:
@@ -297,10 +297,13 @@ for subFolder in subFolders[0:endList]: #subFolders[0:1]
     summaryfile     = os.path.join(subFolder, subf + "-summary.txt")
     print "Parsing summary file: " + summaryfile
     sdata, withSeiz = parse_summary(summaryfile)
-    for iFile in withSeiz[0:endList]:
+    for iFile in withSeiz:
         filename        = sdata[iFile]['File Name'] #filename       = "chb01_03.edf"
         fname           = os.path.join( subFolder, filename)
-        
+        outputfile = os.path.join(root, 'timeseries', filename.replace('.edf','.mat'))
+        if os.path.isfile(outputfile):
+            print 'Exists: ' + outputfile
+            continue
         print "Reading edf file: " + fname
         flag = 1
         while flag != -1: flag = pyedflib.close_file(0) # close the fi
@@ -389,7 +392,7 @@ for subFolder in subFolders[0:endList]: #subFolders[0:1]
             if j%360 == 0:
                 bar.update(j+1)
         bar.finish()
-        outputfile = os.path.join(root, 'timeseries', filename.replace('.edf',''))
+        
         print "saving scipy.io matfile"
         sp.io.savemat(outputfile, timeseries)
 
