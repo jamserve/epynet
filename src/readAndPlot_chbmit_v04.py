@@ -291,7 +291,7 @@ bad = 0
 
 seizData = []
 endList = -1 #-1
-for subFolder in subFolders[0:endList]: #subFolders[0:1]
+for subFolder in subFolders: #subFolders[0:1]
     print subFolder
     subf            = os.path.basename(subFolder)   #subf            = "chb01/"
     summaryfile     = os.path.join(subFolder, subf + "-summary.txt")
